@@ -2,21 +2,22 @@
 #include <Servo.h>
 
 static const int myservoPins[4] = {11, 12, 13, 14}; // 舵机引脚
-Servo myservo = Servo();
+Servo myservo;
 
-int Sweep(int num);
+int Servo_Sweep(int num);
 
 int pos = 90; // variable to store the servo position
 String comdata = "";
-int numdata[4] = {90, 90, 90, 90}, numdata1[4] = {90, 90, 90, 90}, mark = 0;
+int numdata[4] = {0}, numdata1[4] = {30,30,30,30}, mark = 0;
 
 void setup()
 {
   Serial.begin(115200);
-
-  myservo.write(myservoPins[1],30);
-  myservo.write(myservoPins[2],30);
-  delay(10000);
+  Serial.print("hello world");
+  for (int i = 0; i < 4; i++)
+  {
+    myservo.attach(myservoPins[i], 100, 2500);
+  }
 }
 void loop()
 {
@@ -54,8 +55,25 @@ void loop()
       Serial.print(myservoPins[i]);
       Serial.print(" = ");
       Serial.println(numdata[i]);
-      // servo[i].write(numdata[i]);
-      Sweep(i);
+
+      if ((numdata[i] - numdata1[i]) > 0)
+      {
+        for (pos = numdata1[i]; pos <= numdata[i]; pos += 1)
+        {
+          myservo.write(myservoPins[i], pos);
+          delay(15);
+        }
+      }
+      else
+      {
+        for (pos = numdata1[i]; pos >= numdata[i]; pos += -1)
+        {
+          myservo.write(myservoPins[i], pos);
+          delay(15);
+        }
+      }
+
+      //Servo_Sweep(i);
       numdata1[i] = numdata[i];
       numdata[i] = 0;
     }
@@ -63,13 +81,13 @@ void loop()
   }
 }
 
-int Sweep(int num)
+int Servo_Sweep(int num)
 {
   if ((numdata[num] - numdata1[num]) > 0)
   {
     for (pos = numdata1[num]; pos <= numdata[num]; pos += 1)
     {
-      myservo.write(myservoPins[num],pos);
+      myservo.write(myservoPins[num], pos);
       delay(15);
     }
   }
@@ -77,7 +95,7 @@ int Sweep(int num)
   {
     for (pos = numdata1[num]; pos >= numdata[num]; pos += -1)
     {
-      myservo.write(myservoPins[num],pos);
+      myservo.write(myservoPins[num], pos);
       delay(15);
     }
   }
