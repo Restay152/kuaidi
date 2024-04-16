@@ -1,8 +1,8 @@
 #include <Arduino.h>
 #include <Servo.h>
 
-static const int servosPins[4] = {11, 12, 13, 14}; // 舵机引脚
-Servo servos[4];
+static const int myservoPins[4] = {11, 12, 13, 14}; // 舵机引脚
+Servo myservo = Servo();
 
 int Sweep(int num);
 
@@ -13,15 +13,10 @@ int numdata[4] = {90, 90, 90, 90}, numdata1[4] = {90, 90, 90, 90}, mark = 0;
 void setup()
 {
   Serial.begin(115200);
-  for (int i = 0; i < 5; ++i)
-  {
-    if (!servos[i].attach(servosPins[i]))
-    {
-      Serial.print("Servo ");
-      Serial.print(i);
-      Serial.println("attach error");
-    }
-  }
+
+  myservo.write(myservoPins[1],30);
+  myservo.write(myservoPins[2],30);
+  delay(10000);
 }
 void loop()
 {
@@ -56,7 +51,7 @@ void loop()
         numdata[i] = numdata1[i];
       }
       Serial.print("Pin ");
-      Serial.print(servosPins[i]);
+      Serial.print(myservoPins[i]);
       Serial.print(" = ");
       Serial.println(numdata[i]);
       // servo[i].write(numdata[i]);
@@ -74,7 +69,7 @@ int Sweep(int num)
   {
     for (pos = numdata1[num]; pos <= numdata[num]; pos += 1)
     {
-      servos[num].write(pos);
+      myservo.write(myservoPins[num],pos);
       delay(15);
     }
   }
@@ -82,7 +77,7 @@ int Sweep(int num)
   {
     for (pos = numdata1[num]; pos >= numdata[num]; pos += -1)
     {
-      servos[num].write(pos);
+      myservo.write(myservoPins[num],pos);
       delay(15);
     }
   }
