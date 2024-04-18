@@ -17,9 +17,9 @@ void loop()
   client.loop();
   //client.publish(topic,"shengyu");
   servo_command(myservo);
-  Kinematic_Analysis(50,10,100,30,myservo);
-  delay(3000);
-  Kinematic_Analysis(10,20,100,90,myservo);
+  // Kinematic_Analysis(50,10,100,30,myservo);
+  //delay(3000);
+
 }
 
 

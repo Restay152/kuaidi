@@ -3,7 +3,7 @@
 const int myservoPins[4] = {11, 12, 13, 14}; // 舵机引脚
 int pos = 90;                                // variable to store the servo position
 String comdata = "";
-int numdata[4] = {0}, numdata1[4] = {30, 30, 30, 30}, mark = 0;
+int numdata[3] = {0}, numdata1[3] = {0}, mark = 0;
 
 void servo_init(Servo &myservo)
 {
@@ -39,35 +39,13 @@ void servo_command(Servo &myservo)
             }
         }
         comdata = String("");
-        for (int i = 0; i < 4; i++)
+        Kinematic_Analysis(numdata[0], numdata[1], 100, numdata[2], myservo);
+        Serial.println(numdata[0]);
+        Serial.println(numdata[1]);
+
+        // Servo_Sweep(i);
+        for (int i = 0; i < 3; i++)
         {
-            if (numdata[i] == 0)
-            {
-                numdata[i] = numdata1[i];
-            }
-            Serial.print("Pin ");
-            Serial.print(myservoPins[i]);
-            Serial.print(" = ");
-            Serial.println(numdata[i]);
-
-            if ((numdata[i] - numdata1[i]) > 0)
-            {
-                for (pos = numdata1[i]; pos <= numdata[i]; pos += 1)
-                {
-                    myservo.write(myservoPins[i], pos);
-                    delay(15);
-                }
-            }
-            else
-            {
-                for (pos = numdata1[i]; pos >= numdata[i]; pos += -1)
-                {
-                    myservo.write(myservoPins[i], pos);
-                    delay(15);
-                }
-            }
-
-            // Servo_Sweep(i);
             numdata1[i] = numdata[i];
             numdata[i] = 0;
         }
@@ -95,7 +73,7 @@ void Servo_Sweep(int num, Servo &myservo)
 }
 int Kinematic_Analysis(float x, float y, float Beta, float Alpha, Servo &myservo)
 {
-    int l0 = 105, l1 =97, l2 =50;
+    int l0 = 105, l1 = 97, l2 = 50;
     float m, n, k, a, b, c, theta1, theta2, theta3, s1ps2;
     m = l2 * cos(Alpha) - x;                          // 中间变量
     n = l2 * sin(Alpha) - y;                          // 中间变量
@@ -143,8 +121,8 @@ int Kinematic_Analysis(float x, float y, float Beta, float Alpha, Servo &myservo
     if (theta3 < -90)
         theta3 = -90; // 控制舵机的最大角度±90°
 
-    myservo.write(myservoPins[1], theta1+90);
-    myservo.write(myservoPins[2], theta2+90);
-    myservo.write(myservoPins[3], theta3+90);
+    myservo.write(myservoPins[0], theta1 + 90);
+    myservo.write(myservoPins[1], theta2 + 90);
+    myservo.write(myservoPins[2], theta3 + 90);
     return 0;
 }
