@@ -5,7 +5,6 @@
 #include <Servo.h>
 void servo_command(Servo &myservo);
 void Servo_Sweep(int num,Servo& myservo);
-int Kinematic_Analysis(float x, float y, float Beta, float Alpha, Servo &myservo);
 #endif
 
 
