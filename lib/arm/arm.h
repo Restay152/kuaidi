@@ -9,10 +9,10 @@ void Servo_Sweep(int num,Servo& myservo);
 
 
 /*
-Pin 11 = 63
-Pin 12 = 139
-Pin 13 = 146
-Pin 14 = 68
+初始
+176,178,122
+抓取
+164,117,33
 
 
 

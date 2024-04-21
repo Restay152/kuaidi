@@ -1,8 +1,8 @@
 #include "mqtt.h"
 
 // wifi
-const char *ssid = "CMCC-0721";
-const char *password = "11111111";
+const char *ssid = "TonightWJ";
+const char *password = "20040521";
 // MQTT
 bool ledState = false;
 const char *mqtt_broker = "39.104.203.177";
