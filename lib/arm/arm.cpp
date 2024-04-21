@@ -3,7 +3,7 @@
 const int myservoPins[4] = {11, 12, 13, 14}; // 舵机引脚
 int pos = 90;                                // variable to store the servo position
 String comdata = "";
-int numdata[4] = {0}, numdata1[4] = {30, 30, 30, 30}, mark = 0;
+int numdata[4] = {0}, numdata1[4] = {122, 180, 180, 90}, mark = 0;
 
 void servo_init(Servo &myservo)
 {
@@ -74,22 +74,38 @@ void servo_command(Servo &myservo)
         mark = 0;
     }
 }
-void Servo_Sweep(int num, Servo &myservo)
+void Servo_Sweep(int data[4],Servo &myservo)
 {
-    if ((numdata[num] - numdata1[num]) > 0)
+    for (int i = 0; i < 4; i++)
     {
-        for (pos = numdata1[num]; pos <= numdata[num]; pos += 1)
+        if (data[i] == 0)
         {
-            myservo.write(myservoPins[num], pos);
-            delay(15);
+            data[i] = numdata1[i];
         }
-    }
-    else
-    {
-        for (pos = numdata1[num]; pos >= numdata[num]; pos += -1)
+        Serial.print("Pin ");
+        Serial.print(myservoPins[i]);
+        Serial.print(" = ");
+        Serial.println(numdata[i]);
+
+        if ((data[i] - numdata1[i]) > 0)
         {
-            myservo.write(myservoPins[num], pos);
-            delay(15);
+            for (pos = numdata1[i]; pos <= data[i]; pos += 1)
+            {
+                myservo.write(myservoPins[i], pos);
+                delay(15);
+            }
         }
+        else
+        {
+            for (pos = numdata1[i]; pos >= data[i]; pos += -1)
+            {
+                myservo.write(myservoPins[i], pos);
+                delay(15);
+            }
+        }
+
+        // Servo_Sweep(i);
+        numdata1[i] = data[i];
+        //data[i] = 0;
     }
 }
